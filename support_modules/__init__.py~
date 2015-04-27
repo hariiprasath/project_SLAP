@@ -1,0 +1,4 @@
+__all__ = ['pygoogle', 'tkHyperlinkManager']
+
+from pygoogle import *
+import tkHyperlinkManager
