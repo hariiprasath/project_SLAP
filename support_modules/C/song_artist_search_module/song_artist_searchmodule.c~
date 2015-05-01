@@ -160,7 +160,7 @@ static PyObject * song_artist_search_songSearch(PyObject *self, PyObject *args)
 		return NULL;
 	
 	searchhit hit[100];
-	FILE * fptr=fopen("new.txt","r");
+	FILE * fptr=fopen("/home/hari/Desktop/project_SLAP/Repository/new.txt","r");
 	if(!fptr)
 	{	
 		printf("not opened");
@@ -414,7 +414,7 @@ static PyObject * song_artist_search_artistSearch(PyObject *self, PyObject *args
 	char* token;
 	int newline=0;
 	char temp[400];
-	fptr=fopen("IaMdANGEROUS.txt","r");
+	fptr=fopen("/home/hari/Desktop/project_SLAP/Repository/IaMdANGEROUS.txt","r");
 	
 	if(!fptr)
 	{
