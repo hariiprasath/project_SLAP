@@ -6,8 +6,7 @@
 
 # define MAX 50
 
-//exception object definition
-static PyObject *lyricsSearchError;
+static PyObject * lyricsSearchError;
 
 typedef struct hashDataStorage
 {
@@ -78,10 +77,6 @@ char* searchInTableForHighest()
 {
 	int key=1,i,j,k,flag=0;
 	hashData*ptr= arr[key].point;
-	FILE *de2bugOut;
-	de2bugOut=fopen("/home/hari/Desktop/project_SLAP/Repository/soothu666.txt","w");
-	fputs("All the way till here\n",de2bugOut);
-
 	hashData *a[5];
 	for(i=0;i<MAX;i++)
 	{
@@ -93,8 +88,6 @@ char* searchInTableForHighest()
 			break;
 		}
 	}
-	fputs("Second stop\n",de2bugOut);
-
 	for(i=4;i>0;i--)
 		a[i]=a[0];
 	if(flag==0)
@@ -122,24 +115,16 @@ char* searchInTableForHighest()
 			ptr=ptr->next;
 		}
 	}
-	fputs("Third stop\n",de2bugOut);
-			fclose(de2bugOut);
 	if(a[0]==NULL)
-	{
-		FILE *d1ebugOut;
-		d1ebugOut=fopen("/home/hari/Desktop/project_SLAP/Repository/soothuError.txt","w");
-		fputs("All the way till here\n",d1ebugOut);
-		fclose(d1ebugOut);
 		return NULL;
-	}
 	/*for(i=0;i<5;i++)
 		printf("%s -> %d\n",a[i]->str,a[i]->count);
 	*/
-	char outTemp[1500],fileNameVar[200],*pos;
-//	char* outString=malloc(sizeof(char)*1500);
-	char outString[1500];
+	char outTemp[1500],fileNameVar[200];
+	char* outString;
+	outString=malloc(sizeof(char)*1500);
 	strcpy(outString,"");						//this variable will contain the final string to return
-	//strcpy(fileNameVar,"/home/vedant/Desktop/Project/");	//local directory
+	strcpy(fileNameVar,"/home/hari/Desktop/project_SLAP/Repository/Lyrics/");	//local directory
 	FILE *fp;
 	strcpy(outString,"");
 	for(i=0;i<5;i++)
@@ -193,17 +178,12 @@ char* searchInTableForHighest()
 		strcat(outString,"\\t");
 		fclose(fp);
 	}
-	
 	for(i=0;i<5;i++)
 	{
 		strcat(outString,a[i]->str);
 		strcat(outString,"\\t");
 	}
 	//printf("%s",outString);
-	FILE *debugOut;
-	debugOut=fopen("/home/hari/Desktop/project_SLAP/Repository/soothu.txt","w");
-	fputs("All the way till here\n",debugOut);
-	fclose(debugOut);
 	return outString;
 }
 void dataFromFile(char* str)
@@ -253,45 +233,55 @@ int hashMe(char* str)
 {
 	return (tolower(str[0])-'a'+200)%MAX;
 }
-
 static PyObject * lyricsSearch_search(PyObject *self, PyObject *args)
 {
-	const char *line;
-	FILE *debugOut;
-	debugOut=fopen("/home/hari/Desktop/project_SLAP/Repository/soothu.txt","w");
-	fputs("I make changes\n",debugOut);
-
+	const char* line;
+	
 	if(!PyArg_ParseTuple(args, "s", &line))
 		return NULL;
-		
 	initializeTable();
-	fputs("Initialized\n",debugOut);
-	//char line[100],*input;
-	fputs(line,debugOut);
+	//char line[100];
 	int i=0;
 	//scanf("%[^\n]s",line);
 	strcat(line," ");
-	fclose(debugOut);
 	char ch=line[i];
 	char* word2;
-	word2=(char*)malloc(sizeof(char)*20);
+	word2=(char*)malloc(sizeof(char)*100);
 	while(ch!=' '&&ch!='\0'&&ch!='\n'){
 		int j=0;
+		//strcpy(word2," ");
 		while(ch!=' '&&ch!='\0'&&ch!='\n'){
 			ch=line[i];                         //Take a char from string
 			word2[j++]=line[i++];                    //Input that letter into string
+			//printf("\n I am at pos 5");                
 		}
 		word2[j--]='\0';
 		word2[j--]='\0';
-		//printf("%s<<",word2);
+		printf("%s<<",word2);
 		ch=line[i];
 		dataFromFile(word2);
 	}
-	char *sts;
-	sts= searchInTableForHighest();
-	return PyString_FromString(sts);
-	//return Py_BuildValue("s", sts);
-}	
+	//scanf("%[^\n]s",ch2);
+	/*
+	input=strtok(ch2," ");
+	for(;input!=NULL;)
+	{
+		printf("%s<<THIS BITCH\n",input);
+		dataFromFile(input);
+		input=strtok(NULL," ");
+		printf("%s<<THIS BITCH\n",input);
+	}
+	for(i=0;i<5;i++)
+	{
+		scanf("%s",ch2);
+		dataFromFile(ch2);
+	}
+	*/
+	//printTable();
+	//printf("%s",searchInTableForHighest());
+	char *sts = searchInTableForHighest();
+	return Py_BuildValue("s", sts);
+}
 
 //The Module’s Method Table
 static PyMethodDef lyricsSearch_methods[] = {

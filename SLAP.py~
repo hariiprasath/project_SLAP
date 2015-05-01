@@ -9,6 +9,7 @@ import ttk
 from support_modules import *
 
 import lyricsSearch
+import song_artist_search
 
 mainWindow = Tk()
 mainWindow.title("Project SLAP v1.0")
@@ -50,22 +51,22 @@ def splitResult(given):
 #	extractStuff() gets a string, extracts the part of the string to be googled and stores it in the list "stuffToGoogle"
 #	passStuffToExtractStuff() passes strings from the "resultSplit" list to extractStuff()
 #	
+def passStuffToExtractStuff():
+	for i in range(5):
+		extractStuff(resultSplit[i], i)
 def extractStuff(given, n):
 	for i in range(len(given)):
 		if given[i] == "\n":
 			stuffToGoogle[n] = given[:i]
 			break
-def passStuffToExtractStuff():
-	for i in range(5):
-		extractStuff(resultSplit[i], i)
 
 
 #
 #	function to be called when the "Search by Lyrics" button is hit
-#	lsearch() gets the string entered in the search text box and passes it to search() function from "lyricsSearch" module
+#	lSearch() gets the string entered in the search text box and passes it to search() function from "lyricsSearch" module
 #	and initiates splitResult() and showResults()
 #
-def lsearch():
+def lSearch():
 	q = query.get()
 	print "shit1"
 	print q
@@ -74,6 +75,20 @@ def lsearch():
 	print resultPassedFromC
 	splitResult(resultPassedFromC)
 	showResults()
+	return
+	
+def aSearch():
+	q = query.get()
+	resultPassedFromC = song_artist_search.artistSearch(q)
+	print resultPassedFromC
+	splitResult(resultPassedFromC)
+	showResults()
+	return
+	
+def sSearch():
+	q = query.get()
+	resultPassedFromC = song_artist_search.songSearch(q)
+	print "shit2"
 	return
 
 
@@ -95,13 +110,13 @@ searchIcon.place(x=535, y=50, height=30, width=30)
 
 
 #line2 - search buttons
-songSearchBut = Button(mainWindow, text= "Search by Song", bg="light blue", bd=1)
+songSearchBut = Button(mainWindow, text= "Search by Song", bg="light blue", bd=1, command=sSearch)
 songSearchBut.place(x=40, y=110, height=40, width=165)
 
-artistSearchBut = Button(mainWindow, text= "Search by Artist", bg="light blue", bd=1)
+artistSearchBut = Button(mainWindow, text= "Search by Artist", bg="light blue", bd=1, command=aSearch)
 artistSearchBut.place(x=220, y=110, height=40, width=165)
 
-lyricsSearchBut = Button(mainWindow, text= "Search by Lyrics", bg="light blue", bd=1, command=lsearch)
+lyricsSearchBut = Button(mainWindow, text= "Search by Lyrics", bg="light blue", bd=1, command=lSearch)
 lyricsSearchBut.place(x=400, y=110, height=40, width=165)
 
 

@@ -663,7 +663,7 @@ static PyMethodDef song_artist_search_methods[] = {
 };
 
 //The Module's Initialization Function
-PyMODINIT_FUNC initlyricsSearch(void){
+PyMODINIT_FUNC initsong_artist_search(void){
 	PyObject *m;
     m = Py_InitModule("song_artist_search", song_artist_search_methods);
 
