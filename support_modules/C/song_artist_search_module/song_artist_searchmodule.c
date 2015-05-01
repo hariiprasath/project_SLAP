@@ -23,6 +23,7 @@ typedef struct sng
 }song;
 
 song arr[MAX_SIZE];
+
 typedef struct Hit
 {
 	int pos;
@@ -37,6 +38,7 @@ typedef struct node
 	char song_name[60];
 	struct node* next;
 }node_t;
+
 typedef struct artist
 {
 	char artist_name[60];
@@ -162,7 +164,7 @@ static PyObject * song_artist_search_songSearch(PyObject *self, PyObject *args)
 	searchhit hit[100];
 	FILE * fptr=fopen("/home/hari/Desktop/project_SLAP/Repository/new.txt","r");
 	if(!fptr)
-	{	
+	{
 		printf("not opened");
 		return 0;
 	}
@@ -190,7 +192,7 @@ static PyObject * song_artist_search_songSearch(PyObject *self, PyObject *args)
 	  	   
 	  	   
 			   
-	char * low_needle=toLower(str);
+	char* low_needle=toLower(str);
 	char* low_hay;
 	char* token_hay;
 	char* temp_needle;
@@ -209,7 +211,7 @@ static PyObject * song_artist_search_songSearch(PyObject *self, PyObject *args)
 	
 	low_needle=toLower(str);
 	
-	temp_needle=strtok(low_needle," ");
+	temp_needle = strtok(low_needle," ");
 	while(temp_needle != NULL)
 	{
 		token_needle[fk]=malloc(strlen(temp_needle)+1);
@@ -221,10 +223,10 @@ static PyObject * song_artist_search_songSearch(PyObject *self, PyObject *args)
 	int j=0;
 	int hits=0;
 	int tok=0;
-// after this replace temp_needle with token_needle[i]		
+	// after this replace temp_needle with token_needle[i]		
 
 	
-		/* -----SEARCHING FOR HITS STARTS HERE-----*/
+	/* -----SEARCHING FOR HITS STARTS HERE-----*/
 		
 
 	for(j=0;j<fk;j++)

@@ -279,7 +279,10 @@ static PyObject * lyricsSearch_search(PyObject *self, PyObject *args)
 	*/
 	//printTable();
 	//printf("%s",searchInTableForHighest());
-	char *sts = searchInTableForHighest();
+	//return Py_BuildValue("s", "HI");
+	char* output= malloc(sizeof(char)*1500);
+	strcpy(output,searchInTableForHighest());
+	char *sts = output;
 	return Py_BuildValue("s", sts);
 }
 

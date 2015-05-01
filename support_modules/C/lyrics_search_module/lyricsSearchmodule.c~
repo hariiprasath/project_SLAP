@@ -124,7 +124,7 @@ char* searchInTableForHighest()
 	char* outString;
 	outString=malloc(sizeof(char)*1500);
 	strcpy(outString,"");						//this variable will contain the final string to return
-	strcpy(fileNameVar,"/home/hari/Desktop/project_SLAP/Repository/Lyrics");	//local directory
+	strcpy(fileNameVar,"/home/hari/Desktop/project_SLAP/Repository/Lyrics/");	//local directory
 	FILE *fp;
 	strcpy(outString,"");
 	for(i=0;i<5;i++)
@@ -279,7 +279,10 @@ static PyObject * lyricsSearch_search(PyObject *self, PyObject *args)
 	*/
 	//printTable();
 	//printf("%s",searchInTableForHighest());
-	char *sts = searchInTableForHighest();
+	return Py_BuildValue("s", "HI");
+	char* output= malloc(sizeof(char)*1500);
+	strcpy(output,searchInTableForHighest());
+	char *sts = output;
 	return Py_BuildValue("s", sts);
 }
 
