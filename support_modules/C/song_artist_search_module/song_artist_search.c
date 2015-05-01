@@ -93,8 +93,6 @@ float editDistance(char str1[],char str2[])
 	{
 		arr[i][0]=i;
 	}
-
-
 	for(i=1;i<=len2;i++)
 	{
 		for(j=1;j<=len1;j++)
@@ -117,14 +115,13 @@ float editDistance(char str1[],char str2[])
 			diag+=cost;
 			
 			if(up<=left&&up<=diag)
-			arr[j][i]=up;
+				arr[j][i]=up;
 			else if(left<=up&&left<=diag)
-			arr[j][i]=left;
+				arr[j][i]=left;
 			else
-			arr[j][i]=diag;
+				arr[j][i]=diag;
 		}
 	}
-
 	change= arr[len1][len2];
 	float percent_change=((float)change)/((float)strlen(str1));
 	percent_change*=100;
@@ -158,49 +155,38 @@ char* Songmain(char *str)
 	FILE * fptr=fopen("new.txt","r");
 	if(!fptr)
 	{	
-	printf("not opened");
-	return 0;
-}
+		printf("not opened");
+		return 0;
+	}
 	char temp[60];
 	char line[60];
 	int i=0;
 	int flag=1;
 	while(fscanf(fptr,"%s",line))             //Looping through the file_names.txt(I used  fscanf because it does not take 									//the \n into the buffer
-		 {
-			 
-			 if(strcmp(temp,line)==0)		//condition to exit the file after reading it
-			 break;
-			
-
-				if(flag%2==0)
-				{
-				strcpy(arr[i].file_name,line);
-				i++;
-			}
-				else
-				{
-				strcpy(arr[i].song_name,line);
-				
-				
-			}
-							
-			flag++;
-			
-			strcpy(temp,line); //fscanf is repeating the last string again and again so I checked it with a temp string
-	   }
-
-
+	{
+		if(strcmp(temp,line)==0)		//condition to exit the file after reading it
+			break;
+		if(flag%2==0)
+		{
+			strcpy(arr[i].file_name,line);
+			i++;
+		}
+		else
+		{
+			strcpy(arr[i].song_name,line);
+		}
+		flag++;
+		strcpy(temp,line); //fscanf is repeating the last string again and again so I checked it with a temp string
+	}
 	   // ---------------| Searching Part Starts from here |-----------------
 	  	   
 	  	   
-	  	   
-char * low_needle=toLower(str);
-char* low_hay;
-char* token_hay;
-char* temp_needle;
-								/* Substring technique*/
-
-	
+			   
+	char * low_needle=toLower(str);
+	char* low_hay;
+	char* token_hay;
+	char* temp_needle;
+									/* Substring technique*/
 	temp_needle=strtok(low_needle," ");
 	int fk=0;
 	while(temp_needle != NULL)
@@ -224,192 +210,181 @@ char* temp_needle;
 		temp_needle=strtok(NULL," ");
 	}
 	
-	int j=0;  int hits=0; int tok=0;
+	int j=0;
+	int hits=0;
+	int tok=0;
 // after this replace temp_needle with token_needle[i]		
 
 	
 		/* -----SEARCHING FOR HITS STARTS HERE-----*/
 		
 
-for(j=0;j<fk;j++)
-{
-	
-for(i=0;i<MAX_SIZE;i++)
-{
-	low_hay=toLower(arr[i].song_name);
-	
-	tok=0;
-	if(isSubstring(low_hay,token_needle[j]))
+	for(j=0;j<fk;j++)
 	{
-	
-	token_hay=strtok(low_hay,"_");
-	
-	/* -----DEBUGGING-----*/
-	//printf("haystack :%s needle:%s change=%.2f Inposition= %.2f\n",token_hay,token_needle[j],editDistance(token_hay,token_needle[j]),posPercent(token_hay,token_needle[j]));
-	while( token_hay != NULL ) 
-   {	
-
-	if(posPercent(token_hay,token_needle[j])>=50 )
-	{
-		if(editDistance(token_hay,token_needle[j])<50)
+		
+		for(i=0;i<MAX_SIZE;i++)
 		{
-			hit[hits].change=editDistance(token_hay,token_needle[j]);
-			hit[hits].inpos=posPercent(token_hay,token_needle[j]);
-			hit[hits].pos=i;
-			hit[hits].hit_pos=tok;
-			hits++;
-			/* -----DEBUGGING-----*/
-			//printf("%s, percent inPos=%.2f , percent change=%.2f\n",arr[i].song_name,posPercent(token_hay,token_needle[j]),editDistance(token_hay,token_needle[j]));
-			break;
+			low_hay=toLower(arr[i].song_name);
+				
+			tok=0;
+			if(isSubstring(low_hay,token_needle[j]))
+			{
+			
+				token_hay=strtok(low_hay,"_");
+				/* -----DEBUGGING-----*/
+				//printf("haystack :%s needle:%s change=%.2f Inposition= %.2f\n",token_hay,token_needle[j],editDistance(token_hay,token_needle[j]),posPercent(token_hay,token_needle[j]));
+				while( token_hay != NULL ) 
+				{	
+					if(posPercent(token_hay,token_needle[j])>=50 )
+					{
+						if(editDistance(token_hay,token_needle[j])<50)
+						{
+							hit[hits].change=editDistance(token_hay,token_needle[j]);
+							hit[hits].inpos=posPercent(token_hay,token_needle[j]);
+							hit[hits].pos=i;
+							hit[hits].hit_pos=tok;
+							hits++;
+							/* -----DEBUGGING-----*/
+							//printf("%s, percent inPos=%.2f , percent change=%.2f\n",arr[i].song_name,posPercent(token_hay,token_needle[j]),editDistance(token_hay,token_needle[j]));
+							break;
+						}
+					}
+					tok++;	
+					token_hay=strtok(NULL,"_");
+				}
+			}
+			else
+			{
+				low_hay=toLower(arr[i].song_name);
+				token_hay=strtok(low_hay,"_");
+				while( token_hay != NULL ) 
+				{
+					if(editDistance(token_hay,token_needle[j])<30)
+					{
+						hit[hits].change=editDistance(token_hay,token_needle[j]);
+						hit[hits].inpos=-1;
+						hit[hits].pos=i;
+						hit[hits].hit_pos=tok;
+						hits++;
+						/* -----DEBUGGING-----*/
+						//printf("%s ,No substring but change=%.2f\n",arr[i].song_name,editDistance(token_hay,token_needle[j]));
+						break;
+					}
+				   tok++;
+				   token_hay=strtok(NULL,"_");
+			   }
+			}
 		}
-	}
-
-	tok++;	
-	token_hay=strtok(NULL,"_");
-   }
-   
-	}
-	else
-	{
-		low_hay=toLower(arr[i].song_name);
-		token_hay=strtok(low_hay,"_");
-	
-	while( token_hay != NULL ) 
-   {
-	   if(editDistance(token_hay,token_needle[j])<30)
-	   {
-		   	hit[hits].change=editDistance(token_hay,token_needle[j]);
-			hit[hits].inpos=-1;
-			hit[hits].pos=i;
-			hit[hits].hit_pos=tok;
-			hits++;
-			/* -----DEBUGGING-----*/
-		   //printf("%s ,No substring but change=%.2f\n",arr[i].song_name,editDistance(token_hay,token_needle[j]));
-		   break;
-	   }
-	   tok++;
-	   token_hay=strtok(NULL,"_");
-   }
-}
-}
-
 				/* -----SEARCHING FOR HITS ENDS HERE-----*/
-
-
-}
-
-int layer1=0;
-int layer2=0;
-int layer3=0;
-int layer4=0;
-
-int results[hits];
-int counter=0;
-for(i=0;i<hits;i++)
-{
-	for(j=i+1;j<hits;j++)
-	{
-		if(hit[i].pos==hit[j].pos)
-		{
-			/* -----DEBUGGING-----*/
-			//printf("%d). Song=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(j+1),arr[hit[j].pos].song_name,hit[j].hit_pos,hit[j].inpos,hit[j].change);
-			layer1=1;
-			results[counter]=hit[j].pos;
-			counter++;
-		}
 	}
-}
 
-if(layer1==0)
-{
+	int layer1=0;
+	int layer2=0;
+	int layer3=0;
+	int layer4=0;
+
+	int results[hits];
+	int counter=0;
 	for(i=0;i<hits;i++)
 	{
-		if(hit[i].inpos>50 && hit[i].hit_pos<2)
+		for(j=i+1;j<hits;j++)
 		{
-			layer2=1;
+			if(hit[i].pos==hit[j].pos)
+			{
+				/* -----DEBUGGING-----*/
+				//printf("%d). Song=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(j+1),arr[hit[j].pos].song_name,hit[j].hit_pos,hit[j].inpos,hit[j].change);
+				layer1=1;
+				results[counter]=hit[j].pos;
+				counter++;
+			}
+		}
+	}
+
+	if(layer1==0)
+	{
+		for(i=0;i<hits;i++)
+		{
+			if(hit[i].inpos>50 && hit[i].hit_pos<2)
+			{
+				layer2=1;
+				/* -----DEBUGGING-----*/
+				//printf("%d). Song=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),arr[hit[i].pos].song_name,hit[i].hit_pos,hit[i].inpos,hit[i].change);
+				results[counter]=hit[i].pos;
+				counter++;
+			}
+		}
+	}
+
+	if(layer2==0 && layer1==0)
+	{
+		for(i=0;i<hits;i++)
+		{
+			if(hit[i].inpos<0 && hit[i].change<50)
+			{
+				layer3=1;
+				/* -----DEBUGGING-----*/
+				//printf("%d). Song=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),arr[hit[i].pos].song_name,hit[i].hit_pos,hit[i].inpos,hit[i].change);
+				results[counter]=hit[i].pos;
+				counter++;		
+			}
+		}
+	}
+
+	if(layer1==0 && layer2==0 && layer3==0)
+	{
+		for(i=0;i<hits;i++)
+		{
+			layer4=1;
 			/* -----DEBUGGING-----*/
-			//printf("%d). Song=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),arr[hit[i].pos].song_name,hit[i].hit_pos,hit[i].inpos,hit[i].change);
+			/*printf("%d). Song=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),arr[hit[i].pos].song_name
+			,hit[i].hit_pos,hit[i].inpos,hit[i].change);*/
 			results[counter]=hit[i].pos;
 			counter++;
 		}
 	}
-}
 
-if(layer2==0 && layer1==0)
-{
-	for(i=0;i<hits;i++)
+	if(layer4==0 && layer1==0 && layer2==0 && layer3==0 )
 	{
-		if(hit[i].inpos<0 && hit[i].change<50)
+		return NULL;
+	}
+
+
+					/* -----CREATING FORMATED OUTPUT-----*/
+
+	char* output;
+	output=malloc(sizeof(char)*2000);
+	char* delim="\\t";
+
+	for(i=0,j=0;i<5;i++)
+	{	
+		if(j<counter)
 		{
-			layer3=1;
-			/* -----DEBUGGING-----*/
-			//printf("%d). Song=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),arr[hit[i].pos].song_name,hit[i].hit_pos,hit[i].inpos,hit[i].change);
-			results[counter]=hit[i].pos;
-			counter++;		
+			strcat(strcat(output,delim),arr[results[j]].song_name);
+			j++;
+		}
+		else
+		{
+			j=0;
+			i--;
 		}
 	}
-}
-
-if(layer1==0 && layer2==0 && layer3==0)
-{
-for(i=0;i<hits;i++)
-{
-	layer4=1;
-	/* -----DEBUGGING-----*/
-	/*printf("%d). Song=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),arr[hit[i].pos].song_name
-	,hit[i].hit_pos,hit[i].inpos,hit[i].change);*/
-			results[counter]=hit[i].pos;
-			counter++;
-}
-}
-
-if(layer4==0 && layer1==0 && layer2==0 && layer3==0 )
-{
-	
-	return NULL;
-}
-
-
-				/* -----CREATING FORMATED OUTPUT-----*/
-
-char* output;
-output=malloc(sizeof(char)*2000);
-char* delim="\\t";
-
-for(i=0,j=0;i<5;i++)
-{	
-	if(j<counter)
-	{
-	strcat(strcat(output,delim),arr[results[j]].song_name);
-	j++;
+	for(i=0,j=0;i<5;i++)
+	{	
+		if(j<counter)
+		{
+			strcat(strcat(output,delim),arr[results[j]].file_name);
+			j++;
+		}
+		else
+		{
+			j=0;
+			i--;
+		}
 	}
-	else
-	{
-		j=0;
-		i--;
-	}
-}
-for(i=0,j=0;i<5;i++)
-{	
-	if(j<counter)
-	{
-	strcat(strcat(output,delim),arr[results[j]].file_name);
-	j++;
-	}
-	else
-	{
-		j=0;
-		i--;
-	}
-}
-
-
-
 /* -----DEBUGGING-----*/
 //printf("\nHITS=%d\n",hits);	
-
-	   return output;
-   }
+	return output;
+}
    
    
 char* Artistmain(char *str)
@@ -434,7 +409,7 @@ char* Artistmain(char *str)
 		int x=strlen(line);
 		line[x-1]='\0';
 		if(strcmp(temp,line)==0)
-		break;
+			break;
 		token=strtok(line," "); 
 		strcpy(artists[ct].artist_name,token);
 		while(token != NULL)
@@ -443,26 +418,20 @@ char* Artistmain(char *str)
 			if(token)
 			{
 				if(strcmp(token,"\n")==0)
-				newline++;
-			insertSong(ct,token);
-		}
-		
+					newline++;
+				insertSong(ct,token);
+			}
 		}
 		ct++;
 		strcpy(temp,line);
 	}
-	
-
-int flag=0;
-
-char * low_needle=toLower(str);
-char* low_hay;
-char* token_hay;
-char* temp_needle;
-								/* Substring technique*/
-								
-								//SEARCH STARTS HERE
-	
+	int flag=0;
+	char * low_needle=toLower(str);
+	char* low_hay;
+	char* token_hay;
+	char* temp_needle;
+									/* Substring technique*/							
+									//SEARCH STARTS HERE
 	temp_needle=strtok(low_needle," ");
 	int fk=0;
 	while(temp_needle != NULL)
@@ -472,7 +441,6 @@ char* temp_needle;
 	}
 	char* token_needle[fk];
 	fk=0;
-	
 	low_needle=toLower(str);
 	temp_needle=strtok(low_needle," ");
 	while(temp_needle != NULL)
@@ -482,208 +450,185 @@ char* temp_needle;
 		fk++;
 		temp_needle=strtok(NULL," ");
 	}
-
-	
-	int j=0;  int hits=0; int tok=0;
+	int j=0;
+	int hits=0;
+	int tok=0;
 // after this replace temp_needle with token_needle[i]		
 
 		/* -----SEARCHING FOR HITS STARTS HERE-----*/
 
-for(j=0;j<fk;j++)
-{
-	//printf("-----input token:%s------\n",token_needle[j]);
-for(i=0;i<MAX_ARTIST;i++)
-{
-	low_hay=toLower(artists[i].artist_name);
-	
-	tok=0;
-	if(isSubstring(low_hay,token_needle[j]))
+	for(j=0;j<fk;j++)
 	{
-	
-	token_hay=strtok(low_hay,"_");
-	
-	while( token_hay != NULL ) 
-   {	
-	   /*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
-	    //printf("haystack :%s needle:%s change=%.2f Inposition= %.2f\n",token_hay,token_needle[j],editDistance(token_hay,token_needle[j]),posPercent(token_hay,token_needle[j]));
-	   
+		//printf("-----input token:%s------\n",token_needle[j]);
+		for(i=0;i<MAX_ARTIST;i++)
+		{
+			low_hay=toLower(artists[i].artist_name);
+			tok=0;
+			if(isSubstring(low_hay,token_needle[j]))
+			{
+				token_hay=strtok(low_hay,"_");
+				while( token_hay != NULL ) 
+				{	
+					   /*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
+						//printf("haystack :%s needle:%s change=%.2f Inposition= %.2f\n",token_hay,token_needle[j],editDistance(token_hay,token_needle[j]),posPercent(token_hay,token_needle[j]));
+					if(posPercent(token_hay,token_needle[j])>=50 )
+					{
+						if(editDistance(token_hay,token_needle[j])<=50)
+						{
+							hit[hits].change=editDistance(token_hay,token_needle[j]);
+							hit[hits].inpos=posPercent(token_hay,token_needle[j]);
+							hit[hits].pos=i;
+							hit[hits].hit_pos=tok;
+							hits++;
+							/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
+							//printf("%s, percent inPos=%.2f , percent change=%.2f\n",artists[i],posPercent(token_hay,token_needle[j]),editDistance(token_hay,token_needle[j]));
+							break;
+						}
+					}
+			
+					if(editDistance(token_hay,token_needle[j])<40)   // INPOS IS -1 TO CHECK FOR CHANGE
+					{
+						hit[hits].change=editDistance(token_hay,token_needle[j]);
+						hit[hits].inpos=-1;
+						hit[hits].pos=i;
+						hit[hits].hit_pos=tok;
+						hits++;
+						/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
+						//printf("%s, percent inPos=%.2f , percent change=%.2f\n",artists[i],posPercent(token_hay,token_needle[j]),editDistance(token_hay,token_needle[j]));
+						break;
+					}
+					tok++;	
+					token_hay=strtok(NULL,"_");
+				}
+			}
+			else
+			{		
+				low_hay=toLower(artists[i].artist_name);
+				token_hay=strtok(low_hay,"_");
+				
+				/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
+				//printf("haystack :%s needle:%s change=%.2f Inposition= %.2f\n",token_hay,token_needle[j],editDistance(token_hay,token_needle[j]),posPercent(token_hay,token_needle[j]));	
+				while( token_hay != NULL ) 
+				{
+					if(editDistance(token_hay,token_needle[j])<50)
+					{
+						hit[hits].change=editDistance(token_hay,token_needle[j]);
+						hit[hits].inpos=-1;
+						hit[hits].pos=i;
+						hit[hits].hit_pos=tok;
+						hits++;
+						/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
+					   //printf("%s ,No substring but change=%.2f\n",artists[i],editDistance(token_hay,token_needle[j]));
+						break;
+				   }
+				   tok++;
+				   token_hay=strtok(NULL,"_");
+			   }
+			}
+		}
+												//ENDS HERE
+	}
+				/* -----SEARCHING FOR HITS ENDS HERE-----*/
 
-	if(posPercent(token_hay,token_needle[j])>=50 )
+	int layer1=0;
+	int layer2=0;
+	int layer3=0;
+	int layer4=0;
+	int results[hits];
+	int counter=0;
+
+	for(i=0;i<hits;i++)
 	{
-		if(editDistance(token_hay,token_needle[j])<=50)
+		for(j=i+1;j<hits;j++)
 		{
-			hit[hits].change=editDistance(token_hay,token_needle[j]);
-			hit[hits].inpos=posPercent(token_hay,token_needle[j]);
-			hit[hits].pos=i;
-			hit[hits].hit_pos=tok;
-			hits++;
-			/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
-			//printf("%s, percent inPos=%.2f , percent change=%.2f\n",artists[i],posPercent(token_hay,token_needle[j]),editDistance(token_hay,token_needle[j]));
-			break;
+			if(hit[i].pos==hit[j].pos)
+			{
+				/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
+				//printf("%d). Artist=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(j+1),artists[hit[j].pos].artist_name,hit[j].hit_pos,hit[j].inpos,hit[j].change);
+				//printSongs(artists[hit[j].pos].head);
+				layer1=1;
+				results[counter]=hit[j].pos;
+				counter++;
+				//printf("lay1=%d\n",layer1);
+			}
 		}
-		
-		
-	}
-	
-			if(editDistance(token_hay,token_needle[j])<40)   // INPOS IS -1 TO CHECK FOR CHANGE
-		{
-			hit[hits].change=editDistance(token_hay,token_needle[j]);
-			hit[hits].inpos=-1;
-			hit[hits].pos=i;
-			hit[hits].hit_pos=tok;
-			hits++;
-			/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
-			//printf("%s, percent inPos=%.2f , percent change=%.2f\n",artists[i],posPercent(token_hay,token_needle[j]),editDistance(token_hay,token_needle[j]));
-			break;
-		}
-
-
-	tok++;	
-	token_hay=strtok(NULL,"_");
-   }
-   
 	}
 
+	if(layer1==0)
+	{
+		for(i=0;i<hits;i++)
+		{
+			if(hit[i].inpos>50 && hit[i].hit_pos<2)
+			{
+				
+				/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
+				//printf("%d). Artist=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),artists[hit[i].pos].artist_name,hit[i].hit_pos,hit[i].inpos,hit[i].change);
+				//printSongs(artists[hit[i].pos].head);
+				layer2=1;
+				results[counter]=hit[i].pos;
+				counter++;
+				//printf("lay2=%d\n",layer2);
+			}
+		}
+	}
+
+	if(layer2==0 && layer1==0)
+	{
+		for(i=0;i<hits;i++)
+		{
+			if(hit[i].inpos<0 && hit[i].change<40)
+			{
+				
+				/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
+				//printf("%d). Artist=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),artists[hit[i].pos].artist_name,hit[i].hit_pos,hit[i].inpos,hit[i].change);
+				//printSongs(artists[hit[i].pos].head);
+				layer3=1;
+				results[counter]=hit[i].pos;
+				counter++;
+				//printf("lay3=%d\n",layer3);
+			}
+		}
+	}
+
+	if(layer1==0 && layer2==0 && layer3==0)
+	{
+		for(i=0;i<hits;i++)
+		{
+			/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
+			//printf("%d). Artist=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),artists[hit[i].pos].artist_name,hit[i].hit_pos,hit[i].inpos,hit[i].change);
+			//printSongs(artists[hit[i].pos].head);
+			layer4=1;
+			results[counter]=hit[i].pos;
+			counter++;
+			//printf("lay4=%d\n",layer4);
+		}
+	}
+
+	if(layer4==0 && layer1==0 && layer2==0 && layer3==0 )
+	{
+		//printf("No results found :("); 
+		return NULL;
+	}
+
+	char* output=malloc(sizeof(char)*8000);
+	for(i=0,j=0;i<5;i++)
+	{
+		if(j<counter)
+		{
+			strcat(strcat(output,artists[results[j]].artist_name),printSongs(artists[results[j]].head));
+			j++;
+		}
 		else
 		{
-		
-		low_hay=toLower(artists[i].artist_name);
-		token_hay=strtok(low_hay,"_");
-		
-		/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
-		//printf("haystack :%s needle:%s change=%.2f Inposition= %.2f\n",token_hay,token_needle[j],editDistance(token_hay,token_needle[j]),posPercent(token_hay,token_needle[j]));	
-	while( token_hay != NULL ) 
-   {
-	   if(editDistance(token_hay,token_needle[j])<50)
-	   {
-		   	hit[hits].change=editDistance(token_hay,token_needle[j]);
-			hit[hits].inpos=-1;
-			hit[hits].pos=i;
-			hit[hits].hit_pos=tok;
-			hits++;
-			/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
-		   //printf("%s ,No substring but change=%.2f\n",artists[i],editDistance(token_hay,token_needle[j]));
-		   break;
-	   }
-	   tok++;
-	   token_hay=strtok(NULL,"_");
-   }
-}
-
-}
-
-										//ENDS HERE
-	
-	
-}
-			/* -----SEARCHING FOR HITS ENDS HERE-----*/
-
-int layer1=0;
-int layer2=0;
-int layer3=0;
-int layer4=0;
-
-
-int results[hits];
-int counter=0;
-
-for(i=0;i<hits;i++)
-{
-	for(j=i+1;j<hits;j++)
-	{
-		if(hit[i].pos==hit[j].pos)
-		{
-			/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
-			//printf("%d). Artist=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(j+1),artists[hit[j].pos].artist_name,hit[j].hit_pos,hit[j].inpos,hit[j].change);
-			//printSongs(artists[hit[j].pos].head);
-			layer1=1;
-			results[counter]=hit[j].pos;
-			counter++;
-			//printf("lay1=%d\n",layer1);
+			j=0;
+			i--;
 		}
 	}
-}
-
-if(layer1==0)
-{
-	for(i=0;i<hits;i++)
-	{
-		if(hit[i].inpos>50 && hit[i].hit_pos<2)
-		{
-			
-			/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
-			//printf("%d). Artist=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),artists[hit[i].pos].artist_name,hit[i].hit_pos,hit[i].inpos,hit[i].change);
-			//printSongs(artists[hit[i].pos].head);
-			layer2=1;
-			results[counter]=hit[i].pos;
-			counter++;
-			//printf("lay2=%d\n",layer2);
-		}
-	}
-}
-
-if(layer2==0 && layer1==0)
-{
-	for(i=0;i<hits;i++)
-	{
-		if(hit[i].inpos<0 && hit[i].change<40)
-		{
-			
-			/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
-			//printf("%d). Artist=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),artists[hit[i].pos].artist_name,hit[i].hit_pos,hit[i].inpos,hit[i].change);
-			//printSongs(artists[hit[i].pos].head);
-			layer3=1;
-			results[counter]=hit[i].pos;
-			counter++;
-			//printf("lay3=%d\n",layer3);
-		}
-	}
-}
-
-if(layer1==0 && layer2==0 && layer3==0)
-{
-for(i=0;i<hits;i++)
-{
-	/*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
-	//printf("%d). Artist=%s HIT_POS=%d PERCENT INPOS=%.2f PERCENT TO CHANGE=%.2f \n",(i+1),artists[hit[i].pos].artist_name,hit[i].hit_pos,hit[i].inpos,hit[i].change);
-	//printSongs(artists[hit[i].pos].head);
-	layer4=1;
-	results[counter]=hit[i].pos;
-	counter++;
-	//printf("lay4=%d\n",layer4);
-}
-}
-
-if(layer4==0 && layer1==0 && layer2==0 && layer3==0 )
-{
-	//printf("No results found :("); 
-	return NULL;
-}
-
-
-char* output=malloc(sizeof(char)*8000);
-for(i=0,j=0;i<5;i++)
-{	
-	if(j<counter)
-	{
-	strcat(strcat(output,artists[results[j]].artist_name),printSongs(artists[results[j]].head));
-	j++;
-	}
-	else
-	{
-		j=0;
-		i--;
-	}
-}
-
-
 /*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
 //printf("HITS=%d\n",hits);	
-
-
-		fclose(fptr);
-		return output;
-	}	
+	fclose(fptr);
+	return output;
+}	
 
 void main()
 {
