@@ -13,6 +13,9 @@
  *
  * 
  */
+ 
+static PyObject *song_artist_searchError;
+ 
 typedef struct sng
 {
 	char song_name[60];
@@ -149,8 +152,13 @@ char* printSongs(node_t* head)
 	return songs;
 }
 
-char* Songmain(char *str)
+static PyObject * song_artist_search_songSearch(PyObject *self, PyObject *args)
 {
+	const char * str;
+	
+	if(!PyArg_ParseTuple(args, "s", &str))
+		return NULL;
+	
 	searchhit hit[100];
 	FILE * fptr=fopen("new.txt","r");
 	if(!fptr)
@@ -381,15 +389,25 @@ char* Songmain(char *str)
 			i--;
 		}
 	}
-/* -----DEBUGGING-----*/
-//printf("\nHITS=%d\n",hits);	
-	return output;
+	/* -----DEBUGGING-----*/
+	//printf("\nHITS=%d\n",hits);
+	
+	char *sts;
+	sts = output;
+	//return PyString_FromString(sts);
+	return Py_BuildValue("s", sts);
+	
+	//return output;
 }
-   
-   
-char* Artistmain(char *str)
-{
 
+
+static PyObject * song_artist_search_artistSearch(PyObject *self, PyObject *args)
+{
+	const char * str;
+	
+	if(!PyArg_ParseTuple(args, "s", &str))
+		return NULL;
+	
 	searchhit hit[100];
 	FILE* fptr;
 	int ct=0;int i=0;
@@ -627,17 +645,32 @@ char* Artistmain(char *str)
 /*------STATS FOR DEBUGGING CERTAIN QUERIES------*/
 //printf("HITS=%d\n",hits);	
 	fclose(fptr);
-	return output;
-}	
+	
+	char *sts;
+	sts = output;
+	//return PyString_FromString(sts);
+	return Py_BuildValue("s", sts);
+	
+	//return output;
+}
 
-void main()
-{
-	char str[60];
-	printf("Enter artist:\n");
-	scanf("%[^\n]s",str);
-	printf("%s",Artistmain(str));
-	printf("Enter song:");
-	while(getchar()!='\n');
-	scanf("%[^\n]s",str);
-	printf("%s",Songmain(str));
+
+//The Module’s Method Table
+static PyMethodDef song_artist_search_methods[] = {
+	{"songSearch", song_artist_search_songSearch, METH_VARARGS, "Searches by song name"},
+	{"artistSearch", song_artist_search_artistSearch, METH_VARARGS, "Searches by artist name"},
+	{NULL, NULL, 0, NULL} /* Sentinel */
+};
+
+//The Module's Initialization Function
+PyMODINIT_FUNC initlyricsSearch(void){
+	PyObject *m;
+    m = Py_InitModule("song_artist_search", song_artist_search_methods);
+
+    if (m == NULL)
+        return;
+
+    song_artist_searchError = PyErr_NewException("song_artist_search.error", NULL, NULL);
+    Py_INCREF(song_artist_searchError);
+    PyModule_AddObject(m, "error", song_artist_searchError);
 }
