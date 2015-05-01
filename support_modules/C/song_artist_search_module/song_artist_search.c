@@ -1,3 +1,4 @@
+#include<Python.h>
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
@@ -683,7 +684,7 @@ for(i=0,j=0;i<5;i++)
 		fclose(fptr);
 		return output;
 	}	
-			 
+
 void main()
 {
 	char str[60];
@@ -694,4 +695,4 @@ void main()
 	while(getchar()!='\n');
 	scanf("%[^\n]s",str);
 	printf("%s",Songmain(str));
-}		 
+}

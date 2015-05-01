@@ -30,7 +30,11 @@ def googleThis(query):
 	g.pages = 1
 	return g.get_urls()[0]
 
-#function to split the string passed from c into seperate results
+
+#
+#	function to divide the single string passed from c into seperate results and store them in "resultSplit" list
+#	and initiates passStuffToExtractStuff()
+#
 def splitResult(given):
 	k=0
 	j=0
@@ -40,8 +44,12 @@ def splitResult(given):
 			j = i+1
 			k += 1
 	passStuffToExtractStuff()
-			
-#functions to extract song name and artist name from the seperated result string
+
+
+#			
+#	extractStuff() gets a string, extracts the part of the string to be googled and stores it in the list "stuffToGoogle"
+#	passStuffToExtractStuff() passes strings from the "resultSplit" list to extractStuff()
+#	
 def extractStuff(given, n):
 	for i in range(len(given)):
 		if given[i] == "\n":
@@ -52,12 +60,18 @@ def passStuffToExtractStuff():
 		extractStuff(resultSplit[i], i)
 
 
+#
+#	function to be called when the "Search by Lyrics" button is hit
+#	lsearch() gets the string entered in the search text box and passes it to search() function from "lyricsSearch" module
+#	and initiates splitResult() and showResults()
+#
 def lsearch():
 	q = query.get()
 	print "shit1"
 	print q
 	resultPassedFromC = lyricsSearch.search(q)
 	print "shit2"
+	print resultPassedFromC
 	splitResult(resultPassedFromC)
 	showResults()
 	return
@@ -113,7 +127,7 @@ hyperlink = tkHyperlinkManager.HyperlinkManager(results)
 def openBrowser(n):
 	webbrowser.open_new_tab(googleThis(stuffToGoogle[n]))
 
-
+#function that displays final results in the text wiget
 def showResults():	
 	results.insert(INSERT, "1. " + resultSplit[0])
 	results.insert(INSERT, googleThis(stuffToGoogle[0]), hyperlink.add(lambda: openBrowser(0)))
