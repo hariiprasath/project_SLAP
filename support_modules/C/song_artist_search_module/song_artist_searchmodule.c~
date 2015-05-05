@@ -211,7 +211,7 @@ static PyObject * song_artist_search_songSearch(PyObject *self, PyObject *args)
 	
 	low_needle=toLower(str);
 	
-	temp_needle=strtok(low_needle," ");
+	temp_needle = strtok(low_needle," ");
 	while(temp_needle != NULL)
 	{
 		token_needle[fk]=malloc(strlen(temp_needle)+1);
