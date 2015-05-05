@@ -68,26 +68,23 @@ def extractStuff(given, n):
 #
 def lSearch():
 	q = query.get()
-	print "shit1"
-	resultPassedFromC = lyricsSearch.search(q)
-	print "shit2"
-	print resultPassedFromC
-	splitResult(resultPassedFromC)
-	showResults()
+#	resultPassedFromC = lyricsSearch.search(q)
+#	splitResult(resultPassedFromC)
+#	showResults()
 	return
 	
 def aSearch():
 	q = query.get()
 	resultPassedFromC = song_artist_search.artistSearch(q)
-	print resultPassedFromC
 	splitResult(resultPassedFromC)
 	showResults()
 	return
 	
 def sSearch():
 	q = query.get()
-	resultPassedFromC = song_artist_search.songSearch(q)
-	print "shit2"
+#	resultPassedFromC = song_artist_search.songSearch(q)
+#	splitResult(resultPassedFromC)
+#	showResults()
 	return
 
 
